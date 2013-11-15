@@ -1,0 +1,62 @@
+﻿@model MVCExam.Web.ViewModels.TicketViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+<hr />
+<div id="ticket-details">
+    <h2>@Model.Title</h2>
+    <h3>Category: @Model.CategoryName</h3>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <p><strong>Author: </strong>@Model.AuthorName</p>
+            <p><strong>Priority: </strong><span style="text-transform:capitalize">@Model.PriorityType</span></p>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.ScreenshotUrl))
+        {
+            <div class="span4">
+                <img src="@Model.ScreenshotUrl" alt="@Model.Title" style="max-width:250px" />
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <div class="span4">
+                <p>@Model.Description</p>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<hr />
+
+<div id="Comments">
+    @foreach (var comment in Model.Comments)
+    {
+        @Html.Partial("_CommentPartial", comment)
+    }
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <br />
+    using (Ajax.BeginForm("PostComment", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.InsertAfter, UpdateTargetId = "Comments", OnFailure = "commentPostFailure" }))
+    {
+        @Html.Hidden("TicketId", Model.Id)
+        @Html.TextArea("content", new { placeholder="Comment content" })
+        @Html.AntiForgeryToken()
+    <br />
+        <input type="submit" value="Submit comment" />
+    }
+}
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function commentPostFailure(e) {
+            alert("Comment must be between 12 and 200 characters long!");
+        }
+    </script>
+}

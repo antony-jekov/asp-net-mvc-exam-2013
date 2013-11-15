@@ -1,0 +1,12 @@
+﻿@model MVCExam.Web.Areas.Administration.ViewModels.CommentAdminViewModel
+<div style="padding-left:30px">
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="control-group">
+        @Html.LabelFor(model => model.Content, new { @class = "control-label" })
+        <div class="controls">
+            @Html.EditorFor(model => model.Content)
+            @Html.ValidationMessageFor(model => model.Content, null, new { @class = "help-inline" })
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MVCExam.Web.Areas.Administration.ViewModels.CommentAdminViewModel>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Comments Administration Scaffold</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TicketId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AuthorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TicketName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AuthorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })<br />
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "delete-btn" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div>
+    @{
+        int pagesCount = int.Parse(ViewData["PagesCount"].ToString());
+        int currentPage = int.Parse(ViewData["CurrentPage"].ToString());
+    }
+    @for (int i = 0; i < pagesCount; i++)
+{
+    if (i != currentPage)
+    {
+        <span> | @Html.ActionLink(i.ToString(), "List", new { area = "Administration", id = i, controller = "CommentsAdmin" }) </span>
+    }
+    else
+    {
+            <span> | @i </span>
+        }
+    }
+</div>
+
+<script>
+    $(document).ready(function myfunction() {
+        $('.delete-btn').on("click", function (e) {
+            var destroy = confirm("Delete comment?");
+
+            if (!destroy) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>

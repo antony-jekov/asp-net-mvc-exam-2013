@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "All Tickets";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row-fluid">
+    @using (Html.BeginForm("Search", "Tickets", FormMethod.Post))
+    {
+        <label>Search by category<br />
+            @(Html.Kendo()
+                    .DropDownList()
+                    .Name("categoryid")
+                    .DataTextField("CategoryName")
+                    .DataValueField("CategoryId")
+                    .OptionLabel("Select Category")
+                    .DataSource(data =>
+                    {
+                        data.Read(read => read.Action("GetCategoriesDropDown", "Tickets"));
+                        data.ServerFiltering(true);
+                    }))
+        </label>
+        
+        <div>
+            <input type="submit" value="Search" class="btn" />
+        </div>
+
+    }
+</div>
+<br />
+
+<div class="row-fluid">
+    <div class="span3">
+        <h3>Title</h3>
+    </div>
+    <div class="span3">
+        <h3>Category</h3>
+    </div>
+    <div class="span3">
+        <h3>Author</h3>
+    </div>
+    <div class="span3">
+        <h3>Priority</h3>
+    </div>
+</div>
+@(Html.Kendo()
+        .ListView<MVCExam.Web.ViewModels.TicketListViewModel>()
+    .Name("tickets")
+    .TagName("div")
+    .ClientTemplateId("tickets-template")
+    .Pageable()
+    .DataSource(data =>
+    {
+        data.Read("TicketsRead", "Tickets");
+        data.ServerOperation(true);
+        data.PageSize(5);
+        data.Sort(sort => sort.Add(t => t.Id).Descending());
+    }))
+
+<script id="tickets-template" type="text/x-kendo-template">
+    <div class="row-fluid" style="padding: 10px">
+        <div class="span3">
+           <a href="/Tickets/Details/#: Id #" <strong>#: Title #</strong>
+        </div>
+        <div class="span3">
+            <strong>#: Category #</strong>
+        </div>
+        <div class="span3">
+            <strong>#: AuthorName #</strong>
+        </div>
+        <div class="span3">
+            <strong>#: PriorityType #</strong>
+        </div>
+    </div>
+</script>
+

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MVCExam.Web.ViewModels.TicketListViewModel>
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search results</h2>
+@Html.ActionLink("Back to Tickets", "Index")
+<div class="row-fluid">
+    <div class="span4">
+        <h3>Title</h3>
+    </div>
+    <div class="span4">
+        <h3>Category</h3>
+    </div>
+    <div class="span4">
+        <h3>Author</h3>
+    </div>
+</div>
+@(Html.Kendo()
+        .ListView<MVCExam.Web.ViewModels.TicketListViewModel>()
+    .Name("tickets")
+    .TagName("div")
+    .ClientTemplateId("tickets-template")
+    .Pageable()
+    .BindTo(Model)
+)
+
+<script id="tickets-template" type="text/x-kendo-template">
+    <div class="row-fluid" style="padding: 10px">
+        <div class="span4">
+            <a href="/Tickets/Details/#: Id #"<strong>#: Title #</strong>
+        </div>
+        <div class="span4">
+            <strong>#: Category #</strong>
+        </div>
+        <div class="span4">
+            <strong>#: AuthorName #</strong>
+        </div>
+    </div>
+</script>
+
